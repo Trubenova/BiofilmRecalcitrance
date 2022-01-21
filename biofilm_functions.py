@@ -466,6 +466,16 @@ class Treatment():
         self.final_populations=np.append(self.pla_population_record[-1,:],self.bio_population_record[-1,:])
         print (self.pla_population_record)
 
+    def save_output(self, name='test0'):
+        name_p=name+'_pla'
+        name_bio=name+'_bio'
+        np.savetxt(name_p+'_pop.txt', self.pla_population_record)
+        np.savetxt(name_bio+'_pop.txt', self.bio_population_record)
+        #np.savetxt(name+'_time.txt', self.time)
+        #np.savetxt(name+'_conc.txt', self.concentration_record)
+
+        print ('all saved as', name)
+
 
 # In[ ]:
 
