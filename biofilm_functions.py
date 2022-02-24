@@ -58,10 +58,12 @@ class Bacterial_population:
             self.total_cost=self.genotype_costs
             self.psi_max=self.psi_max_s*(1-self.total_cost)
         elif self.living_style==1: #this is for biofilm
-            self.z_mic = self.MIC * (1 + (self.genotype_benefits) + self.biofilm_benefit) #this is for addititve
+            #self.z_mic = self.MIC * (1 + (self.genotype_benefits) + self.biofilm_benefit) #this is for addititve
             self.z_mic = self.MIC * ((self.genotype_benefits) + self.biofilm_benefit)## this is for multiplicative
             self.total_cost=1-(1-self.genotype_costs)*(1-self.biofilm_cost)
             self.psi_max=self.psi_max_s*(1-self.total_cost)
+            self.psi_min=self.psi_min*(1-self.biofilm_cost)
+            ### here i should also define reduction in psi min!
         else:
             print ('error in defining living style')
         self.population_sizes.append(self.initial_pop_size)
@@ -130,7 +132,7 @@ class Stochastic_utility():
         while True:  # just continuously looping until there is a break from within
             #print ('time',t)
             a_conc_t = a_conc*np.exp(my_treatment.degradation_rate*t)  # is this the place where concentration is degraded?!
-            print ('this is concentration', a_conc_t)
+            #print ('this is concentration', a_conc_t)
 
             prop = V(y, a_conc_t)  # propensities
             a0 = sum(prop)  # to see total propensity
@@ -400,23 +402,26 @@ class Treatment():
         XX=name
         time=self.time/60
         plt.plot(time,self.concentration_record)
-        plt.xlabel('time')
+        plt.xlabel('time [h]')
         plt.ylabel('concentration')
         plt.title('this is concentration')
+        plt.xlim([0,self.cycle_length*self.cycle_number/(60)])
         plt.show()
 
         plt.semilogy(time, self.pla_population_record)
-        plt.xlabel('time')
+        plt.xlabel('time [h]')
         plt.ylabel('pop size')
         plt.title('this is plankton')
+        plt.xlim([0,self.cycle_length*self.cycle_number/(60)])
         plt.ylim([1,self.car_cap*1.5])
         #plt.savefig(XX+'Plankton.png',bbox_inches='tight')
         plt.show()
 
         plt.semilogy(time, self.bio_population_record)
         plt.title('this is biofilm')
-        plt.xlabel('time')
+        plt.xlabel('time [h]')
         plt.ylabel('pop size')
+        plt.xlim([0,self.cycle_length*self.cycle_number/(60)])
         plt.ylim([1,self.car_cap*1.5])
         #plt.savefig(XX+'Biofilm.png',bbox_inches='tight')
         plt.show()
@@ -424,8 +429,9 @@ class Treatment():
         plt.semilogy(time, self.pla_population_record)
         plt.semilogy(time, self.bio_population_record,'--')
         plt.title('this is both')
-        plt.xlabel('time')
+        plt.xlabel('time [h]')
         plt.ylabel('pop size')
+        plt.xlim([0,self.cycle_length*self.cycle_number/(60)])
         plt.ylim([1,self.car_cap*1.5])
         plt.savefig(XX+'Biofilm.png',bbox_inches='tight')
         plt.show()
