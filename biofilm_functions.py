@@ -129,7 +129,9 @@ class Stochastic_utility():
         a_conc_array = [a_conc]
         while True:  # just continuously looping until there is a break from within
             #print ('time',t)
-            a_conc_t = a_conc
+            a_conc_t = a_conc*np.exp(my_treatment.degradation_rate*t)  # is this the place where concentration is degraded?!
+            print ('this is concentration', a_conc_t)
+
             prop = V(y, a_conc_t)  # propensities
             a0 = sum(prop)  # to see total propensity
             if a0 == 0:
@@ -150,7 +152,7 @@ class Stochastic_utility():
             # saving the time and results so that we can use it later
             ts.append(t)
             res.append(list(y))
-            a_conc_array.append(a_conc)
+            a_conc_array.append(a_conc_t)
 
         ts=np.array(ts)
         a_conc_array=np.array(a_conc_array)
